@@ -10,7 +10,7 @@ if [ "_$tmp" != "_" ]; then
 	port=$tmp
 fi
 tmp=""
-read -p "Please enter your IP address (default keep the empty):" tmp
+read -p "Please enter your IP address (If your computer has multiple network cards):" tmp
 
 if [ "_$tmp" != "_" ]; then
 	ip=$tmp
@@ -64,7 +64,7 @@ do
 		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data
 	fi
 
-	read -p "Please enter your IP address (default keep the empty):" ip
+	read -p "Please enter your real IP address (integrant):" ip
 	
 
 done
