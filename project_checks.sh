@@ -20,8 +20,8 @@ tmp=""
 
 IFS=$'\n'
 echo "" | tee -a ./conf.txt
-
-read -p "Auto settings profiles?[y/N]" y
+y="y"
+read -p "Auto settings profiles[y/n]?" y
 
 if [ "_$y" == "_y" ]; then
 rm -rf ./conf/*
