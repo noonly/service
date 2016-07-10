@@ -1,5 +1,10 @@
 #! /bin/bash
 read -p "Are you master node [y/n]?" y
+if [ "_$y" == "_y" ]; then
+	y="master"
+else
+	y="slave"
+fi
 defaultpath=`cat ./profile.conf 2>/dev/null` 
 if [ "_$defaultpath" == "_" ]; then
 	defaultpath="/var/lib/git/";
@@ -47,7 +52,7 @@ do
 			while [ "_$pname" == "_" ]
 			do
 				read -p "Enter your project name (important!!!):" pname
-				echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"master\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
+				echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
 			done
 			while [ "_$ppath" == "_" ]
 			do
@@ -61,5 +66,7 @@ do
 		fi
 	fi
 done
+
+y=""
 
 ./project_checks.sh
