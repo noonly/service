@@ -1,5 +1,4 @@
-
-login login
-lo log
 login /Login/web
+
+auth /AccessInterface/isAuth
 
