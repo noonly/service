@@ -42,7 +42,9 @@ do
 	if [ -d $path"/"$folder"/WebRoot" ]; then
 	
 		if [ -f $path"/"$folder"/WebRoot/temp.ctml" ]; then
-			continue
+			if [ -f $path"/"$folder"/WebRoot/setvice.json" ]; then
+				continue
+			fi
 		fi
 		read -p "$folder is your project[y/n]?" is
 		if [ "_$is" == "_y" ]; then
@@ -53,13 +55,15 @@ do
 			do
 				read -p "Enter your project name (important!!!):" pname
 				echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
+				
 			done
 			while [ "_$ppath" == "_" ]
 			do
-				read -p "Enter your project path (important!!! Access this path must return 200 ok):" ppath
+				read -p "Enter your project path (important!!! Access this path must return 200 ok. like:/Login/web):" ppath
 			done
 			#cat ./conf.txt | sed -e '/^$/d' > ./conf.txt
 			echo "$pname $ppath" >> ./conf.txt
+			echo "{\"service\": {\"name\": \"$pname\", \"tags\": [\"web\",\"slave\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$ppath\",\"interval\":\"30s\"}}}"  > "$project/setvice.json"
 			pname=""
 			ppath=""
 			i=$(($i+1))
