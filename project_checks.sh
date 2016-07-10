@@ -5,6 +5,7 @@ ip=""
 pwd=`pwd`
 #project="/Login/web"
 i=0
+tmp=""
 read -p "Please enter your tomcat port (default:8080):" tmp
 if [ "_$tmp" != "_" ]; then
 	port=$tmp

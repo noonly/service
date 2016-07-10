@@ -1,43 +1,5 @@
-login1	/Login/web	/Login/app ...
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-login2	/AccessInterface/isAuth
-
-
-
-
+login login
+lo log
+login /Login/web
 
