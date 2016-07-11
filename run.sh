@@ -3,7 +3,13 @@
 read -p "Is there a new change it after last time. Or first start up [y/n]?" y
 
 if [ "_$y" != "_y" ]; then
-	./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data `cat ip 2>/dev/null`
+
+	while [ "_$tmp" == "_" ]
+	do
+		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data `cat ip 2>/dev/null`
+		read -p "Please enter your real IP address (integrant):" ip
+		echo "$ip" > ip
+	done
 	exit 0
 fi
 read -p "Are you master node [y/n]?" y
