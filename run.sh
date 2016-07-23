@@ -22,7 +22,7 @@ while [ "_$tmp" == '_' ]
 do
         #echo ""
         #echo "invalid container name! please retry!!!"
-        read -p "请输入Tomcat工作目录(例如c:\\works,默认/var/lib/git/): " tmp
+        read -p "请输入Tomcat工作目录(例如c:\\works,默认$defaultpath): " tmp
         
 	if [ "_$tmp" == "_" ]; then
 		tmp=$defaultpath
