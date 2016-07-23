@@ -6,11 +6,11 @@ pwd=`pwd`
 #project="/Login/web"
 i=0
 tmp=""
-read -p "Please enter your tomcat port (default:8080):" tmp
-if [ "_$tmp" != "_" ]; then
-	port=$tmp
-fi
-tmp=""
+#read -p "Please enter your tomcat port (default:8080):" tmp
+#if [ "_$tmp" != "_" ]; then
+#	port=$tmp
+#fi
+#tmp=""
 read -p "Please enter your IP address (If your computer has multiple network cards):" tmp
 
 if [ "_$tmp" != "_" ]; then
@@ -60,6 +60,7 @@ tmp=""
 while [ "_$tmp" == "_" ]
 do
 	if [ "_$ip" != "_" ]; then
+		echo "--bind $ip" > ip
 		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data --bind $ip 
 	else
 		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data
