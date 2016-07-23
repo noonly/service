@@ -85,7 +85,7 @@ do
 		#projectname=$folder
 		while [ "_$pname" == "_" ]
 		do
-			read -p "请输入'$folder'项目中的有效方法的全路径名 (非常重要，此方法在浏览器中无状态访问返回代码应该是200，例如/Login/web 多个方法直接用空格分隔):" pname
+			read -p "请输入'$folder'项目中的有效方法的全路径名 (非常重要，此方法在浏览器中无状态访问返回代码应该是200，例如/Login/web 多个方法直接用tab分隔):" pname
 						
 		done
 		
@@ -95,8 +95,8 @@ do
 			#cat ./conf.txt | sed -e '/^$/d' > ./conf.txt
 			echo -e "$name $method" >> ./conf.txt
 			#echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
-			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "$project/$name.json"
-			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/$name.json"
+			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": 8080, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "$project/$name.json"
+			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": 8080, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/$name.json"
 		done
 		pname=""
 		ppath=""
