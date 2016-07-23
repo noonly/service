@@ -1,6 +1,6 @@
 #! /bin/bash
 
-read -p "Is there a new change it after last time. Or first start up [y/n]?" y
+read -p "在你上次运行之后是否又有变动 [y/n]?" y
 
 if [ "_$y" != "_y" ]; then
 
@@ -12,12 +12,7 @@ if [ "_$y" != "_y" ]; then
 	done
 	exit 0
 fi
-read -p "Are you master node [y/n]?" y
-if [ "_$y" == "_y" ]; then
-	y="master"
-else
-	y="slave"
-fi
+
 defaultpath=`cat ./profile.conf 2>/dev/null` 
 if [ "_$defaultpath" == "_" ]; then
 	defaultpath="/var/lib/git/";
@@ -27,7 +22,7 @@ while [ "_$tmp" == '_' ]
 do
         #echo ""
         #echo "invalid container name! please retry!!!"
-        read -p "Please settings tomcat webapps path (etc. $defaultpath): " tmp
+        read -p "请输入Tomcat工作目录(例如c:\\works,默认/var/lib/git/): " tmp
         
 	if [ "_$tmp" == "_" ]; then
 		tmp=$defaultpath
@@ -63,8 +58,8 @@ do
 		
 		#yy="y"
 		echo "y" > ./data/.local
-		if [ ! -f $path"/"$folder"/WebRoot/temp.ctml" ] || [ ! -f $path"/"$folder"/WebRoot/service.json" ]; then
-			read -p "The path '$folder' is your project[y/n]?" yy
+		if [ ! -f $path"/"$folder"/WebRoot/service.json" ]; then
+			read -p "要把'$folder'项目纳入工程目录吗[y/n]?" yy
 			echo $yy > ./data/.local
 		else
 			
@@ -90,17 +85,19 @@ do
 		#projectname=$folder
 		while [ "_$pname" == "_" ]
 		do
-			read -p "Enter your '$folder' project name (important!!!):" pname
-			echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
-			
+			read -p "请输入'$folder'项目中的有效方法的全路径名 (非常重要，此方法在浏览器中无状态访问返回代码应该是200，例如/Login/web 多个方法直接用空格分隔):" pname
+						
 		done
-		while [ "_$ppath" == "_" ]
+		
+		for method in pname
 		do
-			read -p "Enter your '$folder' project path (important!!! Access this path must return 200 ok. like:/Login/web):" ppath
+			name=`echo $method | awk -F "/" '{print $2}'`
+			#cat ./conf.txt | sed -e '/^$/d' > ./conf.txt
+			echo -e "$pname $ppath" >> ./conf.txt
+			#echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
+			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/name.json"
+			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/name.json"
 		done
-		#cat ./conf.txt | sed -e '/^$/d' > ./conf.txt
-		echo -e "$pname $ppath" >> ./conf.txt
-		echo "{\"service\": {\"name\": \"$pname\", \"tags\": [\"web\",\"slave\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$ppath\",\"interval\":\"30s\"}}}"  > "$project/service.json"
 		pname=""
 		ppath=""
 			
