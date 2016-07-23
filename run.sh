@@ -93,7 +93,7 @@ do
 		do
 			name=`echo $method | awk -F "/" '{print $2}'`
 			#cat ./conf.txt | sed -e '/^$/d' > ./conf.txt
-			echo -e "$name $pname" >> ./conf.txt
+			echo -e "$name $method" >> ./conf.txt
 			#echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
 			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "$project/$name.json"
 			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": $port, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/$name.json"
