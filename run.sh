@@ -1,13 +1,13 @@
 #! /bin/bash
 
-read -p "在你上次运行之后是否又有变动 [y/n]?" y
+read -p "在你上次运行之后是否又有变动 [y/n]?" -e y
 
 if [ "_$y" != "_y" ]; then
 
 	while [ "_$tmp" == "_" ]
 	do
 		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data `cat ip 2>/dev/null`
-		read -p "Please enter your real IP address (integrant):" ip
+		read -p "Please enter your real IP address (integrant):" -e ip
 		echo "$ip" > ip
 	done
 	exit 0
@@ -22,7 +22,7 @@ while [ "_$tmp" == '_' ]
 do
         #echo ""
         #echo "invalid container name! please retry!!!"
-        read -p "请输入Tomcat工作目录(例如c:\\works,默认$defaultpath): " tmp
+        read -p "请输入Tomcat工作目录(例如c:\\works,默认$defaultpath): " -e tmp
         
 	if [ "_$tmp" == "_" ]; then
 		tmp=$defaultpath
@@ -58,25 +58,37 @@ do
 		
 		#yy="y"
 		echo "y" > ./data/.local
-		if [ ! -f $path"/"$folder"/WebRoot/service.json" ]; then
-			read -p "要把'$folder'项目纳入工程目录吗[y/n]?" yy
-			echo $yy > ./data/.local
+		if [ ! -f $path"/"$folder"/WebRoot/service.conf" ]; then
+			read -p "要把'$folder'项目纳入工程目录吗[y/n]?" -e yy
+			#echo $yy > ./data/.local
 		else
-			
-			#echo 'yes="y"' >> $HOME/.profile
-			cat ./conf.txt | while read line
-			do
-				keyword=`echo $line | awk '{print $2}'`
-				if [ "_$keyword" != "_" ]; then
-					m=`grep $keyword $path"/"$folder"/WebRoot/service.json"`
-					if [ "_$m" != "_" ];then
-						echo "no" > ./data/.local
-					fi
-				fi
-				
+			echo "$folder project includes the following content:"
+			for p in `cat $path"/"$folder"/WebRoot/service.conf"`
+			do 
+				echo $p
 			done
+			yy=n
+			read -p "Do you want to append profile[y/n]?" -e yy
+			
+			if [ ]; then
+			#echo 'yes="y"' >> $HOME/.profile
+			for json in `ls $path"/"$folder"/WebRoot/*.json"`
+			do
+				cat $json | while read line
+				do
+					keyword=`echo $line | awk '{print $2}'`
+					if [ "_$keyword" != "_" ]; then
+						m=`grep $keyword $path"/"$folder"/WebRoot/service.conf"`
+						if [ "_$m" != "_" ];then
+							echo "no" > ./data/.local
+						fi
+					fi
+					
+				done
+			done
+			fi
 		fi
-		yy=`cat ./data/.local 2> /dev/null`
+		#yy=`cat ./data/.local 2> /dev/null`
 		
 		if [ "_$yy" != "_y" ]; then
 			continue
@@ -85,8 +97,8 @@ do
 		#projectname=$folder
 		while [ "_$pname" == "_" ]
 		do
-			read -p "请输入'$folder'项目中的有效方法的全路径名 (非常重要，此方法在浏览器中无状态访问返回代码应该是200，例如/Login/web 多个方法直接用tab分隔):" pname
-						
+			read -p "Please input methods full path within '$folder' project (like /Login/web.):" -e pname
+			echo "$pname"  > "$project/service.conf"			
 		done
 		
 		for method in $pname
