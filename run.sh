@@ -123,7 +123,20 @@ do
 			#echo "{{range service \"$pname\"}}{{if (.Tags.Contains \"$y\")}}ok{{end}}{{end}}" > "$project/temp.ctml"
 			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": 8080, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "$project/$name.json"
 			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": 8080, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/$name.json"
-		done
+			
+ 		done
+		
+		if [ -d $path"/"$folder"/.git" ]; then 
+			PWD=`pwd`
+			cd $path"/"$folder
+			rm -rf `find ./ -name ".gitignore"`
+			git add .
+			git commit -m "`date`"
+			git push origin master
+			cd $PWD
+		fi
+		
+			
 		pname=""
 		ppath=""
 			
