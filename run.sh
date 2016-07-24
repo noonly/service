@@ -11,7 +11,13 @@ if [ "_$y" != "_y" ]; then
 		echo "$ip" > ip
 	done
 	exit 0
+	
+#else
+#rm -f ./conf/*
+#rm -f ./conf/.json
+#rm -f ./conf.txt
 fi
+
 
 defaultpath=`cat ./profile.conf 2>/dev/null` 
 if [ "_$defaultpath" == "_" ]; then
@@ -68,7 +74,15 @@ do
 				echo $p
 			done
 			yy=n
-			read -p "Do you want to append profile[y/n]?" -e yy
+			read -p "Do you want to update profile[(c)lean/(a)ppend/(n)o]?" -e yy
+			
+			if [ "_$yy" == "_c" ]; then
+				echo "" >  $path"/"$folder"/WebRoot/service.conf"
+				rm -rf $path"/"$folder"/WebRoot/*.json"
+			fi
+			if [ "_$yy" != "_n" ]; then
+				yy=y
+			fi
 			
 			if [ ]; then
 			#echo 'yes="y"' >> $HOME/.profile
@@ -123,4 +137,16 @@ done
 
 y=""
 
-./project_checks.sh
+while [ "_$tmp" == "_" ]
+do
+	if [ "_$ip" != "_" ]; then
+		echo "--bind $ip" > ip
+		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data --bind $ip 
+	else
+		./consul agent --join 192.168.6.110 -config-dir=./conf -data-dir=./data
+	fi
+
+	read -p "Please enter your real IP address (integrant):" ip
+	
+
+done
