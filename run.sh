@@ -82,6 +82,20 @@ do
 			fi
 			if [ "_$yy" != "_n" ]; then
 				yy=y
+			else
+				PWD=`pwd`
+				cd $path"/"$folder
+				gitnore=`find ./ -name ".gitignore"`
+				
+				if [ "_$gitnore" != "_" ] || [ "_`git status | grep clean`" == "_" ] ; then
+					
+					rm -rf $gitnore
+					git add .
+					git commit -m "`date`"
+					git push origin master
+					
+				fi
+				cd $PWD
 			fi
 			
 			if [ ]; then
@@ -105,6 +119,7 @@ do
 		#yy=`cat ./data/.local 2> /dev/null`
 		
 		if [ "_$yy" != "_y" ]; then
+			
 			continue
 		fi
 		project=$path"/"$folder"/WebRoot"				
