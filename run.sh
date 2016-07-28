@@ -83,6 +83,7 @@ do
 			if [ "_$yy" != "_n" ]; then
 				yy=y
 			else
+			if [ ]; then
 				PWD=`pwd`
 				cd $path"/"$folder
 				gitnore=`find ./ -name ".gitignore"`
@@ -96,6 +97,8 @@ do
 					
 				fi
 				cd $PWD
+				
+			fi
 			fi
 			
 			if [ ]; then
@@ -140,7 +143,7 @@ do
 			echo "{\"service\": {\"name\": \"$name\", \"tags\": [\"web\",\"tomcat\"], \"port\": 8080, \"check\":{\"name\":\"status\",\"http\":\"http://localhost:8080$method\",\"interval\":\"30s\"}}}"  > "./conf/$name.json"
 			
  		done
-		
+		if [ ]; then
 		if [ -d $path"/"$folder"/.git" ]; then 
 			PWD=`pwd`
 			cd $path"/"$folder
@@ -150,7 +153,7 @@ do
 			git push origin master
 			cd $PWD
 		fi
-		
+		fi
 			
 		pname=""
 		ppath=""
